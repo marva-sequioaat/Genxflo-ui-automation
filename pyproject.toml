@@ -1,0 +1,19 @@
+[project]
+name = "genxflow-ui-automation"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "marva-sequioaat",email = "marva@sequoiaat.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "selenium (>=4.29.0,<5.0.0)",
+    "pytest (>=8.3.5,<9.0.0)",
+    "webdriver-manager (>=4.0.2,<5.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
