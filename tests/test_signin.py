@@ -3,6 +3,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
 
 def test_main(get_driver):
     driver=get_driver
@@ -10,17 +12,13 @@ def test_main(get_driver):
     page_title=driver.title
     assert page_title=="Genxflo - Nextflow Bioinformatics Pipeline Builder"
 
-
+@pytest.mark.dependency()
 def test_login(get_driver):
     driver=get_driver
     wait=WebDriverWait(driver,10) 
-   
-    try:
-        # login = wait.until(
-        #     EC.element_to_be_clickable((By.XPATH,'//*[@id="root"]/div/div/div[1]/div[3]/span'))
-        # )
     
-        # driver.execute_script("arguments[0].click();", login)
+    try:
+       
         login=driver.find_element(By.XPATH,'//*[@id="root"]/div/div/div[1]/div[3]/span')
         login.click()
         print(f"Successfully clicked using locator")
@@ -31,28 +29,46 @@ def test_login(get_driver):
         password_input=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[2]/input')
         password_input.send_keys('marva@sequoiaat')
         print("password entered")
-        # signin=wait.until(EC.element_to_be_clickable((By.XPATH,'/html/body/div/div/div/div[2]/button/span')))
         signin=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/button/span')
         signin.click()
-        time.sleep(5)
+        time.sleep(10)
         pipeline_button=driver.find_element(By.XPATH,'//*[@id="root"]/div/div/div[2]/div[1]/div')
         assert pipeline_button
-        # print("successfully clicked signin")
-        # time.sleep(3)
     except Exception as e:
         print(f"Failed with locator : {str(e)}")
         raise
-    #     try:        
-    #         create_pipeline=wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@id="root"]/div/div/div[2]/div[1]/div')))
-    #         create_pipeline.click()
-    #         print("pipeline clicked successfully")
-    #         time.sleep(3)
-    #     except Exception as e:
-    #         print(f"error occured while creating pipeline:{str(e)}")
-
-
-    # except Exception as e:
-    #     print(f"An error occurred: {str(e)}")
-    # finally:
-    #     driver.quit()
-            
+@pytest.mark.dependency(depends=["test_login"])
+def test_pipeline_creation(get_driver):
+    driver=get_driver
+   
+    pipeline_button=driver.find_element(By.XPATH,'/html/body/div/div/div/div[3]/div[1]/div')
+    # pipeline_button.send_keys(Keys.PAGE_DOWN)
+    pipeline_button.click()
+    # wait=WebDriverWait(driver,10)
+    # element=wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@id="root"]/div/div/div[2]/div[1]/div')))
+    
+    # driver.execute_script("arguments[0].scrollIntoView;",element)
+    # element.click()
+    print("pipeline button clicked")
+    time.sleep(10)
+    print("sleep")
+    pipeline_name=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[2]/input')
+    
+    pipeline_name.send_keys("PIPELINE-ONE")
+    pipeline_description=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[3]/textarea')
+    pipeline_description.send_keys("This is a sample pipeline build to test genxflo ui")
+    input_folder=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[4]/input')
+    input_folder.send_keys("/home/marva/Projects/practice/bioinfo-pipeline1/output/SRR32313969_1.fastq")
+    output_folder=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[5]/input')
+    output_folder.send_keys("/output")
+    reference_folder=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[6]/input')
+    reference_folder.send_keys("/reference")
+    time.sleep(5)
+    reference_folder1=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[7]/div/input')
+    reference_folder1.send_keys("/reference2")
+    next_button=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[8]/button[2]')
+    next_button.click()
+    time.sleep(5)
+    pipeline_start_button=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[2]/div[2]/div/div[1]/div[1]/div/div/div[2]/div/div[1]')
+    
+    assert pipeline_start_button

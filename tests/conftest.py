@@ -9,5 +9,6 @@ URL="https://genxflo.com"
 def get_driver():
     driver=webdriver.Chrome()
     driver.get(URL)
+    driver.maximize_window()
     yield driver
     driver.quit()
