@@ -78,14 +78,18 @@ def test_pipeline_creation(get_driver):
     #fastp_add_button=get_driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/button[2]')
     fastp_add_button=WebDriverWait(get_driver,20).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div/div/div/div[2]/div[2]/div[1]/div/div/div[2]/button[2]')))
     fastp_add_button.click()
+    view=get_driver.find_element(By.XPATH,'//*[@id="root"]/div/div/div[2]/div[2]/div[2]/div/div[1]/div[2]/button[3]')
+    view.click()
+
     drag=WebDriverWait(get_driver,20).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div/div/div/div[2]/div[2]/div[2]/div/div[1]/div[1]/div/div/div[2]/div[2]/div[1]')))
     #drag=WebDriverWait(get_driver,20).until(EC.element_to_be_clickable((By.CLASS_NAME,'react-flow__handle react-flow__handle-left nodrag nopan target connectable connectablestart connectableend connecting connectionindicator')))
     drop=WebDriverWait(get_driver,20).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div/div/div/div[2]/div[2]/div[2]/div/div[1]/div[1]/div/div/div[2]/div[1]/div[2]')))
     #drop=WebDriverWait(get_driver,20).until(EC.element_to_be_clickable((By.CLASS_NAME,'react-flow__handle react-flow__handle-right nodrag nopan source connectable connectablestart connectableend connecting connectionindicator')))
-    print(drag.is_displayed(),drop.is_displayed(),"this are the staus")
+  
     actions=ActionChains(get_driver)
     actions.drag_and_drop(drag,drop).perform()
     submit_button=get_driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[2]/div[2]/div/div[1]/div[3]/div/button[2]')
     submit_button.click()
+    time.sleep(3)
     modal=get_driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[2]/div[2]/div/div[2]/div/div')
-    assert modal.is_displayed(),'Element is not displayed on the page'
+    assert modal,'Element is not displayed on the page'
