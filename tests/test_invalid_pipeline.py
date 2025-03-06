@@ -15,16 +15,16 @@ def test_main(get_driver):
 
 """Test case to verify the error message when a required field is kept empty"""
 @pytest.mark.dependency(depends=["test_main"])
-def test_empty_field_error(get_driver):
+def test_empty_field_error(get_driver,get_credentials):
     driver = get_driver
     wait = WebDriverWait(driver, 10)
     
     login = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div/div/div[1]/div[3]/span')))
     login.click()
     email_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]/div[1]/input')))
-    email_input.send_keys("marva@sequoiaat.com")
+    email_input.send_keys(get_credentials["email"])
     password_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]/div[2]/input')))
-    password_input.send_keys('marva@sequoiaat')
+    password_input.send_keys(get_credentials["password"])
     signin = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/div[2]/button/span')))
     signin.click()
     pipeline_button = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div[2]/div[1]/div')))

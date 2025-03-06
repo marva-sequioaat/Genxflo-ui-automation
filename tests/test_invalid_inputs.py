@@ -27,14 +27,15 @@ def test_main(get_driver):
     assert page_title=="Genxflo - Nextflow Bioinformatics Pipeline Builder"
 
 """ Test case to verify the error message when required fields are left empty."""
-def test_not_filled_inputfield(get_driver):
+
+def test_not_filled_inputfield(get_driver,get_credentials):
     driver = get_driver
     wait = WebDriverWait(driver, 10)
     login = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div/div/div[1]/div[3]/span')))
     login.click()
     email_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]/div[1]/input')))
     email_input.clear()
-    email_input.send_keys("marva@sequoiaat.com")
+    email_input.send_keys(get_credentials["email"])
     password_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]/div[2]/input')))
     password_input.clear()
     time.sleep(3)
@@ -55,7 +56,7 @@ def test_invalid_email(get_driver):
     email_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]/div[1]/input')))
     email_input.send_keys("marva@sequoi")
     password_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]/div[2]/input')))
-    password_input.send_keys('marva@sequoiaat')
+    password_input.send_keys('marva@sequoiat')
     signin = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/div[2]/button/span')))
     signin.click()
     wait.until(lambda d: d.find_element(By.XPATH, '//*[@id="root"]/div/div/div[2]/div[5]/p').text == "Email is invalid")

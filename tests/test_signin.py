@@ -17,7 +17,7 @@ def test_main(get_driver):
 
 """Test case that verify successfull login of a user"""
 @pytest.mark.dependency()
-def test_login(get_driver):
+def test_login(get_driver,get_credentials):
     driver = get_driver
     wait = WebDriverWait(driver, 10)
     
@@ -26,9 +26,9 @@ def test_login(get_driver):
         login = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div/div/div[1]/div[3]/span')))
         login.click()
         email_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]/div[1]/input')))
-        email_input.send_keys("marva@sequoiaat.com")
+        email_input.send_keys(get_credentials["email"])
         password_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]/div[2]/input')))
-        password_input.send_keys('marva@sequoiaat')
+        password_input.send_keys(get_credentials["password"])
         signin = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/div[2]/button/span')))
         signin.click()
 
