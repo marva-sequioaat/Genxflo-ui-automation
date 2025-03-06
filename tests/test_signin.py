@@ -6,12 +6,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+
+"""Test case to verify the web page is loaded successfully"""
 def test_main(get_driver):
     driver=get_driver
     
     page_title=driver.title
     assert page_title=="Genxflo - Nextflow Bioinformatics Pipeline Builder"
 
+
+"""Test case that verify successfull login of a user"""
 @pytest.mark.dependency()
 def test_login(get_driver):
     driver = get_driver
@@ -34,7 +38,8 @@ def test_login(get_driver):
     except (TimeoutException, NoSuchElementException) as e:
         print(f"Failed to locate element: {str(e)}")
         raise
-    
+
+"""Test case that verify the successfull submission of pipeline form"""   
 @pytest.mark.dependency(depends=["test_login"])
 def test_pipeline_form_creation(get_driver):
     driver=get_driver
@@ -65,7 +70,7 @@ def test_pipeline_form_creation(get_driver):
     
     assert pipeline_start_button
 
-
+"""Test case that verify the successfull creation of a pipeline"""
 @pytest.mark.dependency(depends=["test_pipeline_form_creation"])
 def test_pipeline_creation(get_driver):
     fastp_button=get_driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[1]/div/div[1]/div[4]/div[1]/button')

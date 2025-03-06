@@ -4,10 +4,9 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver import ActionChains
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
-"""SIGNIN TESTS"""
+
+
 
 #test1:no user found
 #test2:invalid email
@@ -20,13 +19,14 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 #test3:The reference base path should start with a '/' character.
 #test4:reference name is same as that of base path.please enTER ACTUAL REFERENCE FILE NAME
 
+"""Test case to verify the web page is loaded successfully"""
 def test_main(get_driver):
     driver=get_driver
     
     page_title=driver.title
     assert page_title=="Genxflo - Nextflow Bioinformatics Pipeline Builder"
 
-   
+""" Test case to verify the error message when required fields are left empty."""
 def test_not_filled_inputfield(get_driver):
     driver = get_driver
     wait = WebDriverWait(driver, 10)
@@ -47,6 +47,8 @@ def test_not_filled_inputfield(get_driver):
     expected_message="Please fill all the details"
     assert error_message==expected_message
 
+
+"""Test case to verify the error message when an invalid email format is entered."""
 def test_invalid_email(get_driver):
     driver = get_driver
     wait = WebDriverWait(driver, 10)
@@ -63,6 +65,7 @@ def test_invalid_email(get_driver):
     assert error_message==expected_message
     
 
+"""Test case to verify the error message when an incorrect password is entered."""
 def test_wrong_password(get_driver):
     driver = get_driver
     wait = WebDriverWait(driver, 10)
@@ -80,6 +83,8 @@ def test_wrong_password(get_driver):
     expected_message="Wrong Email or Password"
     assert error_message==expected_message
 
+
+"""Test case to verify the error message when an unregistered user tries to log in."""
 def test_user_not_found(get_driver):
     driver = get_driver
     wait = WebDriverWait(driver, 10)
