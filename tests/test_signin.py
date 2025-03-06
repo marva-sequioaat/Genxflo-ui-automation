@@ -5,7 +5,7 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
-
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 def test_main(get_driver):
     driver=get_driver
     
@@ -14,34 +14,30 @@ def test_main(get_driver):
 
 @pytest.mark.dependency()
 def test_login(get_driver):
-    driver=get_driver
-    wait=WebDriverWait(driver,10) 
+    driver = get_driver
+    wait = WebDriverWait(driver, 10)
     
     try:
        
-        login=driver.find_element(By.XPATH,'//*[@id="root"]/div/div/div[1]/div[3]/span')
+        login = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div/div/div[1]/div[3]/span')))
         login.click()
-        print(f"Successfully clicked using locator")
-        time.sleep(5)
-        email_input=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[1]/input')
+        email_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]/div[1]/input')))
         email_input.send_keys("marva@sequoiaat.com")
-        print("EMAIL ENETERD")
-        password_input=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[2]/input')
+        password_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]/div[2]/input')))
         password_input.send_keys('marva@sequoiaat')
-        print("password entered")
-        signin=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/button/span')
+        signin = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/div[2]/button/span')))
         signin.click()
-        time.sleep(10)
-        pipeline_button=driver.find_element(By.XPATH,'//*[@id="root"]/div/div/div[2]/div[1]/div')
-        assert pipeline_button
-    except Exception as e:
-        print(f"Failed with locator : {str(e)}")
+
+        pipeline_button = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div[2]/div[1]/div')))
+        assert pipeline_button is not None
+    
+    except (TimeoutException, NoSuchElementException) as e:
+        print(f"Failed to locate element: {str(e)}")
         raise
+    
 @pytest.mark.dependency(depends=["test_login"])
 def test_pipeline_form_creation(get_driver):
     driver=get_driver
-    # pipeline_button=driver.find_element(By.XPATH,'/html/body/div/div/div/div[3]/div[1]/div')
-    # if pipeline_button is None:
     pipeline_button=driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[1]/div')
     pipeline_button.click()
     
@@ -82,10 +78,9 @@ def test_pipeline_creation(get_driver):
     view.click()
 
     drag=WebDriverWait(get_driver,20).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div/div/div/div[2]/div[2]/div[2]/div/div[1]/div[1]/div/div/div[2]/div[2]/div[1]')))
-    #drag=WebDriverWait(get_driver,20).until(EC.element_to_be_clickable((By.CLASS_NAME,'react-flow__handle react-flow__handle-left nodrag nopan target connectable connectablestart connectableend connecting connectionindicator')))
+
     drop=WebDriverWait(get_driver,20).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div/div/div/div[2]/div[2]/div[2]/div/div[1]/div[1]/div/div/div[2]/div[1]/div[2]')))
-    #drop=WebDriverWait(get_driver,20).until(EC.element_to_be_clickable((By.CLASS_NAME,'react-flow__handle react-flow__handle-right nodrag nopan source connectable connectablestart connectableend connecting connectionindicator')))
-  
+    
     actions=ActionChains(get_driver)
     actions.drag_and_drop(drag,drop).perform()
     submit_button=get_driver.find_element(By.XPATH,'/html/body/div/div/div/div[2]/div[2]/div[2]/div/div[1]/div[3]/div/button[2]')
