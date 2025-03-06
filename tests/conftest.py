@@ -7,13 +7,13 @@ URL="https://genxflo.com"
 
 @pytest.fixture(scope="module")
 def get_driver():
-    # options=Options()
-    # options.add_argument("--headless=new")
-    driver=webdriver.Chrome()
-    #driver=webdriver.Chrome(options=options)
+    options=Options()
+    options.add_argument("--headless=new")
+    # driver=webdriver.Chrome()
+    driver=webdriver.Chrome(options=options)
     driver.get(URL)
     driver.maximize_window()
     yield driver
     driver.quit()
-    # /html/body/div/div/div/div[2]/div[4]/input
+   
     
